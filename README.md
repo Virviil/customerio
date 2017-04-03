@@ -4,13 +4,4 @@
 
 An Elixir client for the Customer.io event API.
 
-## Installation
-
-The package can be installed
-by adding `customerio` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [{:customerio, "~> 0.1.0"}]
-end
-```
+## [Documentation](https://hexdocs.pm/customerio)
