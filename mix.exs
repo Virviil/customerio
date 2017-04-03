@@ -34,7 +34,7 @@ defmodule Customerio.Mixfile do
       {:ex_doc, "~> 0.0", only: :dev},
       {:poison, "~> 3.0"},
       {:exvcr, "~> 0.8", only: :test},
-      {:inch_ex, "~> 0.5", only: [:dev, :test]},
+      {:inch_ex,"~> 0.5", only: :docs}
     ]
   end
 
@@ -48,7 +48,7 @@ defmodule Customerio.Mixfile do
     [
       name: :customerio,
       files: ["lib", "mix.exs", "README*"],
-      maintainer: ["Dmitry Rubinshtein"],
+      maintainers: ["Dmitry Rubinshtein"],
       licenses: ["MIT"],
       links: %{"Gihub"=>"https://github.com/virviil/customerio"}
     ]
