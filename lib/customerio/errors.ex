@@ -5,5 +5,8 @@ defmodule Customerio.Error do
 end
 
 defmodule Customerio.Success do
+  @doc """
+  Test
+  """
   defstruct [:response]
 end
