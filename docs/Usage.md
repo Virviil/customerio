@@ -34,8 +34,8 @@ Customerio.identify(
   %{                                        # attributes map
     email: "bob@example.com",
     created_at: :os.system_time(:seconds),
-    :first_name => "Bob",
-    :plan => "basic"
+    first_name: "Bob",
+    plan: "basic"
   }
 )
 ```
