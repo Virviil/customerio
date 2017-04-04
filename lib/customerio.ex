@@ -1,4 +1,7 @@
 defmodule Customerio do
+  @moduledoc """
+  Main module to interact with API.
+  """
   import Customerio.Util
 
   @type value :: number | String.t | atom()
