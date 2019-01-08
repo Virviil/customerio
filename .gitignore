@@ -21,3 +21,6 @@ erl_crash.dump
 
 # Ignore config files
 config/config.exs
+
+# Ignore ElixirLS files
+.elixir_ls

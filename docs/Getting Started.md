@@ -7,7 +7,7 @@ by adding `customerio` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:customerio, "~> 0.1.2"}]
+  [{:customerio, "~> 0.2"}]
 end
 ```
 

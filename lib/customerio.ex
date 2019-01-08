@@ -5,6 +5,7 @@ defmodule Customerio do
   import Customerio.Util
 
   @type value :: number | String.t | atom()
+  @type result :: String.t()
 
   @doc """
   Creating or updating customers.
@@ -21,7 +22,7 @@ defmodule Customerio do
 
   ```elixir
   iex> Customerio.identify(5, %{email: "success@example.com"})
-  {:ok, %Customerio.Success{}}
+  {:ok, "..."}
   iex> Customerio.identify(6, %{email: "fail@example.com"})
   {:error, %Customerio.Error{}}
   ```
@@ -29,7 +30,7 @@ defmodule Customerio do
   @spec identify(
     id :: value,
     data_map :: %{key: value},
-    opts :: [key: value]) :: {:ok, Customerio.Success.t} | {:error, Customerio.Error.t}
+    opts :: [key: value]) :: {:ok, result} | {:error, Customerio.Error.t}
   def identify(id, data_map, opts \\ []) do
     send_request(
       :put,
@@ -56,7 +57,7 @@ defmodule Customerio do
 
   ```elixir
   iex> Customerio.identify!(5, %{email: "success@example.com"})
-  %Customerio.Success{}
+  ".."
   iex> Customerio.identify!(6, %{email: "fail@example.com"})
   ** (Customerio.Error) "Epic fail!"
   ```
@@ -64,10 +65,10 @@ defmodule Customerio do
   @spec identify!(
     id :: value,
     data_map :: %{key: value},
-    opts :: [key: value]) :: Customerio.Success.t
+    opts :: [key: value]) :: result | no_return()
   def identify!(id, data_map, opts \\ []) do
     case identify(id, data_map, opts) do
-      {:ok, s = %Customerio.Success{} } -> s
+      {:ok, result} -> result
       {:error, e} -> raise e
     end
   end
@@ -85,14 +86,14 @@ defmodule Customerio do
 
   ```elixir
   iex> Customerio.delete(5)
-  {:ok, %Customerio.Success{}}
+  {:ok, "..."}
   iex> Customerio.delete(6)
   {:error, %Customerio.Error{}}
   ```
   """
   @spec delete(
     id :: value,
-    opts :: [key: value]) :: {:ok, Customerio.Success.t} | {:error, Customerio.Error.t}
+    opts :: [key: value]) :: {:ok, result} | {:error, Customerio.Error.t}
   def delete(id, opts \\ []) do
     send_request(
       :delete,
@@ -118,17 +119,17 @@ defmodule Customerio do
 
   ```elixir
   iex> Customerio.delete!(5)
-  %Customerio.Success{}
+  ",,,"
   iex> Customerio.delete!(6)
   ** (Customerio.Error) "Epic fail!"
   ```
   """
   @spec delete!(
     id :: value,
-    opts :: [key: value]) :: Customerio.Success.t
+    opts :: [key: value]) :: result | no_return()
   def delete!(id, opts \\ []) do
     case delete(id, opts) do
-      {:ok, s = %Customerio.Success{}} -> s
+      {:ok, result} -> result
       {:error, e} -> raise e
     end
   end
@@ -151,7 +152,7 @@ defmodule Customerio do
 
   ```elixir
   iex> Customerio.track(5, "purchase", %{price: 23,45})
-  {:ok, %Customerio.Success{}}
+  {:ok, "..."}
   iex> Customerio.track(6, "crash", %{reason: "epic fail"})
   {:error, %Customerio.Error{}}
   ```
@@ -160,7 +161,7 @@ defmodule Customerio do
     id :: value,
     name :: value,
     data_map :: %{key: value},
-    opts :: [key: value]) :: {:ok, Customerio.Success.t} | {:error, Customerio.Error.t}
+    opts :: [key: value]) :: {:ok, result} | {:error, Customerio.Error.t}
   def track(id, name, data_map, opts \\ []) do
     send_request(
       :post,
@@ -198,10 +199,10 @@ defmodule Customerio do
     id :: value,
     name :: value,
     data_map :: %{key: value},
-    opts :: [key: value]) :: Customerio.Success.t
+    opts :: [key: value]) :: result | no_return()
   def track!(id, name, data_map, opts \\ []) do
     case track(id, name, data_map, opts) do
-      {:ok, s = %Customerio.Success{}} -> s
+      {:ok, result} -> result
       {:error, e} -> raise e
     end
   end
@@ -221,7 +222,7 @@ defmodule Customerio do
 
   ```elixir
   iex> Customerio.anonymous_track("purchase", %{recipient: "success@example.com"})
-  {:ok, %Customerio.Success{}}
+  "..."
   iex> Customerio.anonymous_track("purchase", %{recipient: "fail@example.com"})
   {:error, %Customerio.Error{}}
   ```
@@ -229,7 +230,7 @@ defmodule Customerio do
   @spec anonymous_track(
     name :: value,
     data_map :: %{key: value},
-    opts :: [key: value]) :: {:ok, Customerio.Success.t} | {:error, Customerio.Error.t}
+    opts :: [key: value]) :: {:ok, result} | {:error, Customerio.Error.t}
   def anonymous_track(name, data_map, opts \\ []) do
     send_request(
       :post,
@@ -264,10 +265,10 @@ defmodule Customerio do
   @spec anonymous_track!(
     name :: value,
     data_map :: %{key: value},
-    opts :: [key: value]) :: Customerio.Success.t
+    opts :: [key: value]) :: result | no_return()
   def anonymous_track!(name, data_map, opts \\ []) do
     case anonymous_track(name, data_map, opts) do
-      {:ok, s = %Customerio.Success{}} -> s
+      {:ok, result} -> result
       {:error, e} -> raise e
     end
   end
@@ -299,7 +300,7 @@ defmodule Customerio do
     id :: value,
     page_name :: String.t,
     data_map :: %{key: value},
-    opts :: [key: value]) :: {:ok, Customerio.Success.t} | {:error, Customerio.Error.t}
+    opts :: [key: value]) :: {:ok, result} | {:error, Customerio.Error.t}
   def track_page_view(id, page_name, data_map, opts \\ []) do
     send_request(
       :post,
@@ -337,10 +338,10 @@ defmodule Customerio do
     id :: value,
     page_name :: value,
     data_map :: %{key: value},
-    opts :: [key: value]) :: Customerio.Success.t | {:error, Customerio.Error.t}
+    opts :: [key: value]) :: result | no_return()
   def track_page_view!(id, page_name, data_map, opts \\ []) do
     case track_page_view(id, page_name, data_map, opts) do
-      {:ok, s = %Customerio.Success{}} -> s
+      {:ok, result} -> result
       {:error, e} -> raise e
     end
   end

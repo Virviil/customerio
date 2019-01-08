@@ -1,22 +1,19 @@
 defmodule Customerio.Util do
-  @moduledoc """
-  Collection of utilites for this library.
-  You should not use it in your code.
-  """
+  @moduledoc false
+
   @base_route "https://track.customer.io/api/v1/"
 
   defp get_username, do: Application.get_env(:customerio, :site_id)
   defp get_password, do: Application.get_env(:customerio, :api_key)
 
-  defp put_auth(opts) do
+  defp with_auth(opts) do
     opts
     |> Keyword.put(
-      :hackney, [
-        basic_auth: {
-          get_username(),
-          get_password()
-        }
-      ]
+      :hackney,
+      basic_auth: {
+        get_username(),
+        get_password()
+      }
     )
   end
 
@@ -31,21 +28,30 @@ defmodule Customerio.Util do
 
   @type method :: :get | :post | :delete | :put | :patch
   @spec send_request(
-    method :: method,
-    route :: String.t,
-    data_map :: %{},
-    opts :: []) :: any
+          method :: method,
+          route :: String.t(),
+          data_map :: %{},
+          opts :: []
+        ) :: any
   def send_request(method, route, data_map, opts \\ []) do
-    case HTTPoison.request(
-      method,
-      @base_route <> route,
-      data_map |> Poison.encode!,
-      put_headers(),
-      opts |> put_auth
-    ) do
-      {:ok, response = %HTTPoison.Response{status_code: 200}} -> {:ok, %Customerio.Success{response: response}}
-      {:ok, response} -> {:error, %Customerio.Error{reason: response}}
-      {:error, reason} -> {:error, %Customerio.Error{reason: reason}}
+    case :hackney.request(
+           method,
+           @base_route <> route,
+           put_headers(),
+           data_map |> Jason.encode!(),
+           with_auth(opts)
+         ) do
+      {:ok, 200, _, client_ref} ->
+        case :hackney.body(client_ref) do
+          {:ok, data} -> {:ok, data}
+          _ -> {:error, %Customerio.Error{reason: "hackney internal error"}}
+        end
+
+      {:ok, status_code, _, client_ref} ->
+        {:error, %Customerio.Error{code: status_code, reason: elem(:hackney.body(client_ref), 1)}}
+
+      {:error, reason} ->
+        {:error, %Customerio.Error{reason: reason}}
     end
   end
 end
