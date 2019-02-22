@@ -33,7 +33,7 @@ defmodule Customerio.Mixfile do
       {:ex_doc, "~> 0.0", only: :dev},
       {:jason, "~> 1.1"},
       {:exvcr, "~> 0.10", only: :test},
-      {:inch_ex, "~> 2.0", only: :docs}
+      {:inch_ex, "~> 2.0", only: [:docs, :dev, :test]}
     ]
   end
 

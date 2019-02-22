@@ -22,12 +22,16 @@ defmodule Customerio.Util do
     [{"Content-Type", "application/json"}]
   end
 
+
+  @typedoc """
+  Available HTTP methods
+  """
+  @type method :: :get | :post | :delete | :put | :patch
+
   @doc """
   This method sends requests to `customer.io` API endpoint, with
   defined method, route, body and HTTPoison options.
   """
-
-  @type method :: :get | :post | :delete | :put | :patch
   @spec send_request(
           method :: method,
           route :: String.t(),

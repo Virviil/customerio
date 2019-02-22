@@ -4,7 +4,14 @@ defmodule Customerio do
   """
   import Customerio.Util
 
+  @typedoc """
+  Represents fuzzy type that can be used to send data to Customer.IO
+  """
   @type value :: number | String.t() | atom()
+
+  @typedoc """
+  Represents the type of an Customer.IO API answers
+  """
   @type result :: String.t()
 
   @doc """
