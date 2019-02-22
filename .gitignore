@@ -23,4 +23,7 @@ erl_crash.dump
 config/config.exs
 
 # Ignore ElixirLS files
-.elixir_ls
+**/.elixir_ls
+
+# Ignore MacOS service files
+**/.DS_Store

@@ -4,7 +4,7 @@ defmodule Customerio.Mixfile do
   def project do
     [
       app: :customerio,
-      version: "0.2.0",
+      version: "0.2.1",
       elixir: "~> 1.6",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -33,7 +33,7 @@ defmodule Customerio.Mixfile do
       {:ex_doc, "~> 0.0", only: :dev},
       {:jason, "~> 1.1"},
       {:exvcr, "~> 0.10", only: :test},
-      {:inch_ex, "~> 1.0", only: :docs}
+      {:inch_ex, "~> 2.0", only: :docs}
     ]
   end
 

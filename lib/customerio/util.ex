@@ -1,5 +1,6 @@
 defmodule Customerio.Util do
   @moduledoc false
+  @type value :: number | String.t() | atom()
 
   @base_route "https://track.customer.io/api/v1/"
 
@@ -7,8 +8,8 @@ defmodule Customerio.Util do
   defp get_password, do: Application.get_env(:customerio, :api_key)
 
   defp with_auth(opts) do
-    opts
-    |> Keyword.put(
+    Keyword.put(
+      opts,
       :hackney,
       basic_auth: {
         get_username(),
@@ -30,28 +31,28 @@ defmodule Customerio.Util do
   @spec send_request(
           method :: method,
           route :: String.t(),
-          data_map :: %{},
-          opts :: []
-        ) :: any
+          data_map :: map(),
+          opts :: Keyword.t()
+        ) :: {:ok, String.t()} | {:error, Customerio.Error.t()}
   def send_request(method, route, data_map, opts \\ []) do
-    case :hackney.request(
-           method,
-           @base_route <> route,
-           put_headers(),
-           data_map |> Jason.encode!(),
-           with_auth(opts)
-         ) do
-      {:ok, 200, _, client_ref} ->
-        case :hackney.body(client_ref) do
-          {:ok, data} -> {:ok, data}
-          _ -> {:error, %Customerio.Error{reason: "hackney internal error"}}
-        end
+    :hackney.request(
+      method,
+      @base_route <> route,
+      put_headers(),
+      data_map |> Jason.encode!(),
+      with_auth(opts)
+    )
+  else
+    {:ok, 200, _, client_ref} ->
+      case :hackney.body(client_ref) do
+        {:ok, data} -> {:ok, data}
+        _ -> {:error, %Customerio.Error{reason: "hackney internal error"}}
+      end
 
-      {:ok, status_code, _, client_ref} ->
-        {:error, %Customerio.Error{code: status_code, reason: elem(:hackney.body(client_ref), 1)}}
+    {:ok, status_code, _, client_ref} ->
+      {:error, %Customerio.Error{code: status_code, reason: elem(:hackney.body(client_ref), 1)}}
 
-      {:error, reason} ->
-        {:error, %Customerio.Error{reason: reason}}
-    end
+    {:error, reason} ->
+      {:error, %Customerio.Error{reason: reason}}
   end
 end
