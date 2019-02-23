@@ -11,7 +11,14 @@ defmodule Customerio.Mixfile do
       deps: deps(),
       description: description(),
       package: package(),
-      docs: docs()
+      docs: docs(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -33,7 +40,8 @@ defmodule Customerio.Mixfile do
       {:ex_doc, "~> 0.0", only: :dev},
       {:jason, "~> 1.1"},
       {:exvcr, "~> 0.10", only: :test},
-      {:inch_ex, "~> 2.0", only: [:docs, :dev, :test]}
+      {:inch_ex, "~> 2.0", only: [:docs, :dev, :test]},
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
