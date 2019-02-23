@@ -560,6 +560,8 @@ defmodule Customerio do
   if it exists and suppresses all future events
   and identifies for for that customer.
 
+  Raises `Customerio.Error` if fails.
+
   ## Params
 
     * `id` - the unique identifier for the customer.
@@ -626,6 +628,8 @@ defmodule Customerio do
   Note when a user is suppressed thier history is deleted
   and unsupressing them wil not recover that history.
 
+  Raises `Customerio.Error` if fails.
+
   ## Params
 
     * `id` - the unique identifier for the customer.
@@ -647,6 +651,152 @@ defmodule Customerio do
         ) :: result | no_return()
   def unsuppress!(id, opts \\ []) do
     unsuppress(id, opts)
+  else
+    {:ok, result} -> result
+    {:error, e} -> raise e
+  end
+
+  #############################################################################
+  ### Segments
+  #############################################################################
+
+  @doc """
+  Add the list of customer ids to the specified manual segment.
+  If you send customer ids that don't exist yet
+  in an add_to_segment request, we will automatically
+  create customer profiles for the new customer ids.
+
+  ## Params
+
+    * `id` - the unique identifier of the segment.
+
+    * `ids` - a list of customer ids to add to the segment.
+
+    * `opts` - HTTPoison options.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.add_to_segment(1, [1, 2, 3])
+  {:ok, "..."}
+  iex> Customerio.add_to_segment(1000, [1, 2, 3])
+  {:error, %Customerio.Error{}}
+  ```
+  """
+  @spec add_to_segment(
+          id :: value,
+          ids :: list(value),
+          opts :: Keyword.t()
+        ) :: {:ok, result} | {:error, Customerio.Error.t()}
+  def add_to_segment(id, ids, opts \\ []) do
+    send_request(
+      :post,
+      "segments/#{URI.encode(id |> to_string)}/add_customers",
+      %{ids: ids},
+      opts
+    )
+  end
+
+  @doc """
+  Add the list of customer ids to the specified manual segment.
+  If you send customer ids that don't exist yet
+  in an add_to_segment request, we will automatically
+  create customer profiles for the new customer ids.
+
+  Raises `Customerio.Error` if fails.
+
+  ## Params
+
+    * `id` - the unique identifier of the segment.
+
+    * `ids` - a list of customer ids to add to the segment.
+
+    * `opts` - HTTPoison options.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.add_to_segment!(1, [1, 2, 3])
+  "..."
+  iex> Customerio.add_to_segment(1000, [1, 2, 3])
+  ** (Customerio.Error) "Epic fail!"
+  ```
+  """
+  @spec add_to_segment!(
+          id :: value,
+          ids :: list(value),
+          opts :: Keyword.t()
+        ) :: result | no_return()
+  def add_to_segment!(id, ids, opts \\ []) do
+    add_to_segment(id, ids, opts)
+  else
+    {:ok, result} -> result
+    {:error, e} -> raise e
+  end
+
+  @doc """
+  Remove the list of customer ids from the specified manual segment.
+
+  ## Params
+
+    * `id` - the unique identifier of the segment.
+
+    * `ids` - a list of customer ids to add to the segment.
+
+    * `opts` - HTTPoison options.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.remove_from_segment(1, [1, 2, 3])
+  {:ok, "..."}
+  iex> Customerio.remove_from_segment(1000, [1, 2, 3])
+  {:error, %Customerio.Error{}}
+  ```
+  """
+  @spec remove_from_segment(
+          id :: value,
+          ids :: list(value),
+          opts :: Keyword.t()
+        ) :: {:ok, result} | {:error, Customerio.Error.t()}
+  def remove_from_segment(id, ids, opts \\ []) do
+    send_request(
+      :post,
+      "segments/#{URI.encode(id |> to_string)}/remove_customers",
+      %{ids: ids},
+      opts
+    )
+  end
+
+  @doc """
+  Remove the list of customer ids from the specified manual segment.
+
+  Raises `Customerio.Error` if fails.
+
+  ## Params
+
+    * `id` - the unique identifier of the segment.
+
+    * `ids` - a list of customer ids to add to the segment.
+
+    * `opts` - HTTPoison options.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.remove_from_segment!(1, [1, 2, 3])
+  "..."
+  iex> Customerio.remove_from_segment(1000, [1, 2, 3])
+  ** (Customerio.Error) "Epic fail!"
+  ```
+  """
+  @spec remove_from_segment!(
+          id :: value,
+          ids :: list(value),
+          opts :: Keyword.t()
+        ) :: result | no_return()
+  def remove_from_segment!(id, ids, opts \\ []) do
+    remove_from_segment(id, ids, opts)
   else
     {:ok, result} -> result
     {:error, e} -> raise e
