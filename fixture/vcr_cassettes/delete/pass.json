@@ -8,21 +8,24 @@
       "method": "delete",
       "options": {
         "basic_auth": [
-          "== HIDDEN ==",
-          "== HIDDEN =="
+          "52c402d17a952ebc4951",
+          "2a41b47fef49256f7b96"
         ]
       },
       "request_body": "",
-      "url": "https://track.customer.io/api/v1/customers/5"
+      "url": "https://track.customer.io/api/v1/customers/1"
     },
     "response": {
+      "binary": false,
       "body": "{}\n",
       "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
         "Content-Type": "application/json; charset=utf-8",
         "Status": "200 OK",
-        "Date": "Mon, 03 Apr 2017 11:39:12 GMT",
+        "Date": "Sat, 23 Feb 2019 08:00:18 GMT",
         "Content-Length": "3",
-        "Access-Control-Allow-Origin": "*"
+        "Via": "1.1 google",
+        "Alt-Svc": "clear"
       },
       "status_code": 200,
       "type": "ok"

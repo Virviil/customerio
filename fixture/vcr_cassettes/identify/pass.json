@@ -7,22 +7,22 @@
       },
       "method": "put",
       "options": {
-        "basic_auth": [
-          "== HIDDEN ==",
-          "== HIDDEN =="
-        ]
+        "basic_auth": "***"
       },
       "request_body": "",
-      "url": "https://track.customer.io/api/v1/customers/5"
+      "url": "https://track.customer.io/api/v1/customers/1"
     },
     "response": {
+      "binary": false,
       "body": "{}\n",
       "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
         "Content-Type": "application/json; charset=utf-8",
         "Status": "200 OK",
-        "Date": "Mon, 03 Apr 2017 11:25:44 GMT",
+        "Date": "Sat, 23 Feb 2019 07:54:59 GMT",
         "Content-Length": "3",
-        "Access-Control-Allow-Origin": "*"
+        "Via": "1.1 google",
+        "Alt-Svc": "clear"
       },
       "status_code": 200,
       "type": "ok"

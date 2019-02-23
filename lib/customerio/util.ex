@@ -8,20 +8,12 @@ defmodule Customerio.Util do
   defp get_password, do: Application.get_env(:customerio, :api_key)
 
   defp with_auth(opts) do
-    Keyword.put(
-      opts,
-      :hackney,
-      basic_auth: {
-        get_username(),
-        get_password()
-      }
-    )
+    Keyword.merge([basic_auth: {get_username(), get_password()}], opts)
   end
 
   defp put_headers do
     [{"Content-Type", "application/json"}]
   end
-
 
   @typedoc """
   Available HTTP methods
