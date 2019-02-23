@@ -4,6 +4,8 @@ elixir:
   - 1.7.2
 otp_release:
   - 21.0
+env:
+  - MIX_ENV=test
 script: mix coveralls.travis
 after_script:
   - mix deps.get --only docs
