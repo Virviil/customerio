@@ -802,6 +802,22 @@ defmodule Customerio do
     {:error, e} -> raise e
   end
 
+  @doc """
+  Trigger a campaign execution.
+
+  ## Params
+
+    * `id` - the unique identifier of the campaign.
+
+    * `data` - data to be included in the campaign.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.trigger_campaign(1, %{data: %{title: "hello"}})
+  ```
+  """
+
   def trigger_campaign(id, data \\ []) do
     send_api_request(:post, "/campaigns/#{URI.encode(id |> to_string)}/triggers", data)
   end
