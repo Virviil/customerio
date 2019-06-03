@@ -1,0 +1,31 @@
+[
+  {
+    "request": {
+      "body": "{\"data\":{\"title\":\"Campaign Test\"}}",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "method": "post",
+      "options": {
+        "basic_auth": "***"
+      },
+      "request_body": "",
+      "url": "https://api.customer.io/v1/api/campaigns/7/triggers"
+    },
+    "response": {
+      "binary": false,
+      "body": "{\"id\":47}",
+      "headers": {
+        "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+        "Content-Type": "application/json; charset=utf-8",
+        "Status": "200 OK",
+        "Date": "Sat, 03 Jun 2019 09:00:01 GMT",
+        "Content-Length": "3",
+        "Via": "1.1 google",
+        "Alt-Svc": "clear"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]
