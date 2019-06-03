@@ -40,7 +40,7 @@ defmodule Customerio do
           opts :: [key: value]
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def identify(id, data_map, opts \\ []) do
-    send_request(
+    send_behavioral_request(
       :put,
       "customers/#{URI.encode(id |> to_string)}",
       data_map,
@@ -105,7 +105,7 @@ defmodule Customerio do
           opts :: [key: value]
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def delete(id, opts \\ []) do
-    send_request(
+    send_behavioral_request(
       :delete,
       "customers/#{URI.encode(id |> to_string)}",
       %{},
@@ -173,7 +173,7 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def track(id, name, data_map, opts \\ []) do
-    send_request(
+    send_behavioral_request(
       :post,
       "customers/#{URI.encode(id |> to_string)}/events",
       %{name: name, data: data_map},
@@ -244,7 +244,7 @@ defmodule Customerio do
           opts :: [key: value]
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def anonymous_track(name, data_map, opts \\ []) do
-    send_request(
+    send_behavioral_request(
       :post,
       "events",
       %{name: name, data: data_map},
@@ -315,7 +315,7 @@ defmodule Customerio do
           opts :: [key: value]
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def track_page_view(id, page_name, data_map, opts \\ []) do
-    send_request(
+    send_behavioral_request(
       :post,
       "customers/#{URI.encode(id |> to_string)}/events",
       %{name: page_name, type: "page", data: data_map},
@@ -399,7 +399,7 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def add_device(id, device_id, platfrom, data_map \\ %{}, opts \\ []) do
-    send_request(
+    send_behavioral_request(
       :put,
       "customers/#{URI.encode(id |> to_string)}/devices",
       %{device: Map.merge(%{id: device_id, platform: platfrom}, data_map)},
@@ -476,7 +476,7 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def delete_device(id, device_id, opts \\ []) do
-    send_request(
+    send_behavioral_request(
       :delete,
       "customers/#{URI.encode(id |> to_string)}/devices/#{URI.encode(device_id |> to_string)}",
       %{},
@@ -547,7 +547,7 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def suppress(id, opts \\ []) do
-    send_request(
+    send_behavioral_request(
       :post,
       "customers/#{URI.encode(id |> to_string)}/suppress",
       %{},
@@ -614,7 +614,7 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def unsuppress(id, opts \\ []) do
-    send_request(
+    send_behavioral_request(
       :post,
       "customers/#{URI.encode(id |> to_string)}/unsuppress",
       %{},
@@ -689,7 +689,7 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def add_to_segment(id, ids, opts \\ []) do
-    send_request(
+    send_behavioral_request(
       :post,
       "segments/#{URI.encode(id |> to_string)}/add_customers",
       %{ids: ids},
@@ -760,7 +760,7 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def remove_from_segment(id, ids, opts \\ []) do
-    send_request(
+    send_behavioral_request(
       :post,
       "segments/#{URI.encode(id |> to_string)}/remove_customers",
       %{ids: ids},
@@ -800,5 +800,9 @@ defmodule Customerio do
   else
     {:ok, result} -> result
     {:error, e} -> raise e
+  end
+
+  def trigger_campaign(id, data \\ []) do
+    send_api_request(:post, "/campaigns/#{URI.encode(id |> to_string)}/triggers", data)
   end
 end
