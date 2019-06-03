@@ -22,16 +22,36 @@ defmodule Customerio.Util do
   """
   @type method :: :get | :post | :delete | :put | :patch
 
+  @doc """
+  This method sends requests to `customer.io` Behavioral API endpoint, with
+  defined method, route, body and HTTPoison options.
+  """
+  @spec send_behavioral_request(
+          method :: method,
+          route :: String.t(),
+          data_map :: map(),
+          opts :: Keyword.t()
+        ) :: {:ok, String.t()} | {:error, Customerio.Error.t()}
   def send_behavioral_request(method, route, data_map, opts \\ []) do
     send_request(method, @behavioral_base_route <> route, data_map, opts)
   end
 
+  @doc """
+  This method sends requests to `customer.io` API endpoint, with
+  defined method, route, body and HTTPoison options.
+  """
+  @spec send_api_request(
+          method :: method,
+          route :: String.t(),
+          data_map :: map(),
+          opts :: Keyword.t()
+        ) :: {:ok, String.t()} | {:error, Customerio.Error.t()}
   def send_api_request(method, route, data_map, opts \\ []) do
     send_request(method, @api_base_route <> route, data_map, opts)
   end
 
   @doc """
-  This method sends requests to `customer.io` API endpoint, with
+  This method sends requests to `customer.io` API endpoints, with
   defined method, route, body and HTTPoison options.
   """
   @spec send_request(
@@ -40,7 +60,7 @@ defmodule Customerio.Util do
           data_map :: map(),
           opts :: Keyword.t()
         ) :: {:ok, String.t()} | {:error, Customerio.Error.t()}
-  def send_request(method, route, data_map, opts \\ []) do
+  defp send_request(method, route, data_map, opts \\ []) do
     :hackney.request(
       method,
       route,
