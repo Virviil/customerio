@@ -818,7 +818,7 @@ defmodule Customerio do
   ```
   """
 
-  def trigger_campaign(id, data \\ []) do
+  def trigger_campaign(id, data_map, opts \\ []) do
     send_api_request(:post, "/campaigns/#{URI.encode(id |> to_string)}/triggers", data)
   end
 end
