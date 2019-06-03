@@ -2,7 +2,9 @@ defmodule Customerio.Util do
   @moduledoc false
   @type value :: number | String.t() | atom()
 
-  @base_route "https://track.customer.io/api/v1/"
+  @behavioral_base_route "https://track.customer.io/api/v1/"
+
+  @api_base_route "https://api.customer.io/v1/api"
 
   defp get_username, do: Application.get_env(:customerio, :site_id)
   defp get_password, do: Application.get_env(:customerio, :api_key)
@@ -20,6 +22,14 @@ defmodule Customerio.Util do
   """
   @type method :: :get | :post | :delete | :put | :patch
 
+  def send_behavioral_request(method, route, data_map, opts \\ []) do
+    send_request(method, @behavioral_base_route <> route, data_map, opts)
+  end
+
+  def send_api_request(method, route, data_map, opts \\ []) do
+    send_request(method, @api_base_route <> route, data_map, opts)
+  end
+
   @doc """
   This method sends requests to `customer.io` API endpoint, with
   defined method, route, body and HTTPoison options.
@@ -33,7 +43,7 @@ defmodule Customerio.Util do
   def send_request(method, route, data_map, opts \\ []) do
     :hackney.request(
       method,
-      @base_route <> route,
+      route,
       put_headers(),
       data_map |> Jason.encode!(),
       with_auth(opts)
