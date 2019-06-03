@@ -50,17 +50,13 @@ defmodule Customerio.Util do
     send_request(method, @api_base_route <> route, data_map, opts)
   end
 
-  @doc """
-  This method sends requests to `customer.io` API endpoints, with
-  defined method, route, body and HTTPoison options.
-  """
   @spec send_request(
           method :: method,
           route :: String.t(),
           data_map :: map(),
           opts :: Keyword.t()
         ) :: {:ok, String.t()} | {:error, Customerio.Error.t()}
-  defp send_request(method, route, data_map, opts \\ []) do
+  defp send_request(method, route, data_map, opts) do
     :hackney.request(
       method,
       route,
