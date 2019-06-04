@@ -444,10 +444,10 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: result | no_return()
   def add_device!(id, device_id, platfrom, data_map \\ %{}, opts \\ []) do
-    add_device(id, device_id, platfrom, data_map, opts)
-  else
-    {:ok, result} -> result
-    {:error, e} -> raise e
+    case add_device(id, device_id, platfrom, data_map, opts) do
+      {:ok, result} -> result
+      {:error, e} -> raise e
+    end
   end
 
   @doc """
@@ -512,10 +512,10 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: result | no_return()
   def delete_device!(id, device_id, opts \\ []) do
-    delete_device(id, device_id, opts)
-  else
-    {:ok, result} -> result
-    {:error, e} -> raise e
+    case delete_device(id, device_id, opts) do
+      {:ok, result} -> result
+      {:error, e} -> raise e
+    end
   end
 
   #############################################################################
@@ -582,10 +582,10 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: result | no_return()
   def suppress!(id, opts \\ []) do
-    suppress(id, opts)
-  else
-    {:ok, result} -> result
-    {:error, e} -> raise e
+    case suppress(id, opts) do
+      {:ok, result} -> result
+      {:error, e} -> raise e
+    end
   end
 
   @doc """
@@ -650,10 +650,10 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: result | no_return()
   def unsuppress!(id, opts \\ []) do
-    unsuppress(id, opts)
-  else
-    {:ok, result} -> result
-    {:error, e} -> raise e
+    case unsuppress(id, opts) do
+      {:ok, result} -> result
+      {:error, e} -> raise e
+    end
   end
 
   #############################################################################
@@ -728,10 +728,10 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: result | no_return()
   def add_to_segment!(id, ids, opts \\ []) do
-    add_to_segment(id, ids, opts)
-  else
-    {:ok, result} -> result
-    {:error, e} -> raise e
+    case add_to_segment(id, ids, opts) do
+      {:ok, result} -> result
+      {:error, e} -> raise e
+    end
   end
 
   @doc """
@@ -796,10 +796,39 @@ defmodule Customerio do
           opts :: Keyword.t()
         ) :: result | no_return()
   def remove_from_segment!(id, ids, opts \\ []) do
-    remove_from_segment(id, ids, opts)
-  else
-    {:ok, result} -> result
-    {:error, e} -> raise e
+    case remove_from_segment(id, ids, opts) do
+      {:ok, result} -> result
+      {:error, e} -> raise e
+    end
+  end
+
+  @doc """
+  Trigger a campaign execution.
+
+  Raises `Customerio.Error` if fails.
+
+  ## Params
+
+    * `id` - the unique identifier of the campaign.
+
+    * `data` - data to be included in the campaign.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.trigger_campaign(1, %{data: %{title: "hello"}})
+  {:ok, "{...}"}
+  iex> Customerio.trigger_campaign(666, %{data: %{title: "heaven company"}})
+  {:error, %Customerio.Error{}}
+  ```
+  """
+  @spec trigger_campaign(
+          id :: value,
+          data_map :: map(),
+          opts :: Keyword.t()
+        ) :: {:ok, result} | {:error, Customerio.Error.t()}
+  def trigger_campaign(id, data_map, opts \\ []) do
+    send_api_request(:post, "/campaigns/#{URI.encode(id |> to_string)}/triggers", data_map, opts)
   end
 
   @doc """
@@ -815,14 +844,20 @@ defmodule Customerio do
 
   ```elixir
   iex> Customerio.trigger_campaign(1, %{data: %{title: "hello"}})
+  {:ok, "{...}"}
+  iex> Customerio.trigger_campaign(666, %{data: %{title: "heaven company"}})
+  ** (Customerio.Error) "Epic fail!"
   ```
   """
-  @spec trigger_campaign(
-    id :: value,
-    data_map :: map(),
-    opts :: Keyword.t()
-  ) :: {:ok, result} | {:error, Customerio.Error.t()}
-  def trigger_campaign(id, data_map, opts \\ []) do
-    send_api_request(:post, "/campaigns/#{URI.encode(id |> to_string)}/triggers", data_map, opts)
+  @spec trigger_campaign!(
+          id :: value,
+          data_map :: map(),
+          opts :: Keyword.t()
+        ) :: result | no_return()
+  def trigger_campaign!(id, data_map, opts \\ []) do
+    case trigger_campaign(id, data_map, opts) do
+      {:ok, result} -> result
+      {:error, e} -> raise e
+    end
   end
 end

@@ -57,24 +57,24 @@ defmodule Customerio.Util do
           opts :: Keyword.t()
         ) :: {:ok, String.t()} | {:error, Customerio.Error.t()}
   defp send_request(method, route, data_map, opts) do
-    :hackney.request(
-      method,
-      route,
-      put_headers(),
-      data_map |> Jason.encode!(),
-      with_auth(opts)
-    )
-  else
-    {:ok, 200, _, client_ref} ->
-      case :hackney.body(client_ref) do
-        {:ok, data} -> {:ok, data}
-        _ -> {:error, %Customerio.Error{reason: "hackney internal error"}}
-      end
+    case :hackney.request(
+           method,
+           route,
+           put_headers(),
+           data_map |> Jason.encode!(),
+           with_auth(opts)
+         ) do
+      {:ok, 200, _, client_ref} ->
+        case :hackney.body(client_ref) do
+          {:ok, data} -> {:ok, data}
+          _ -> {:error, %Customerio.Error{reason: "hackney internal error"}}
+        end
 
-    {:ok, status_code, _, client_ref} ->
-      {:error, %Customerio.Error{code: status_code, reason: elem(:hackney.body(client_ref), 1)}}
+      {:ok, status_code, _, client_ref} ->
+        {:error, %Customerio.Error{code: status_code, reason: elem(:hackney.body(client_ref), 1)}}
 
-    {:error, reason} ->
-      {:error, %Customerio.Error{reason: reason}}
+      {:error, reason} ->
+        {:error, %Customerio.Error{reason: reason}}
+    end
   end
 end
