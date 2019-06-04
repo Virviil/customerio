@@ -8,8 +8,8 @@
       "method": "post",
       "options": {
         "basic_auth": [
-          "52c402d17a952ebc4951",
-          "2a41b47fef49256f7b96"
+          "",
+          ""
         ]
       },
       "request_body": "",
