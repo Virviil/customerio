@@ -805,8 +805,6 @@ defmodule Customerio do
   @doc """
   Trigger a campaign execution.
 
-  Raises `Customerio.Error` if fails.
-
   ## Params
 
     * `id` - the unique identifier of the campaign.
@@ -833,6 +831,8 @@ defmodule Customerio do
 
   @doc """
   Trigger a campaign execution.
+
+  Raises `Customerio.Error` if fails.
 
   ## Params
 
