@@ -4,8 +4,8 @@ defmodule Customerio.Mixfile do
   def project do
     [
       app: :customerio,
-      version: "0.2.2",
-      elixir: "~> 1.7",
+      version: "0.2.3",
+      elixir: "~> 1.9",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -36,10 +36,10 @@ defmodule Customerio.Mixfile do
 
   defp deps do
     [
-      {:hackney, "~> 1.15"},
+      {:hackney, "~> 1.17"},
       {:ex_doc, "~> 0.0", only: :dev},
-      {:jason, "~> 1.1"},
-      {:exvcr, "~> 0.10", only: :test},
+      {:jason, "~> 1.2"},
+      {:exvcr, "~> 0.12", only: :test},
       {:inch_ex, "~> 2.0", only: [:docs, :dev, :test]},
       {:excoveralls, "~> 0.10", only: :test}
     ]

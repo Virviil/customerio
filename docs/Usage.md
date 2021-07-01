@@ -45,7 +45,7 @@ Customerio.identify(
 Deleting a customer will remove them, and all their information from Customer.io. Note: if you're still sending data to **Customer.io** via other means (such as the javascript snippet), the customer could be recreated.
 
 ```elixir
-Customerio.identify(
+Customerio.delete(
   5                                          # id
 )
 ```
