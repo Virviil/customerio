@@ -14,6 +14,12 @@ defmodule Customerio do
   """
   @type result :: String.t()
 
+
+
+  #############################################################################
+  ### Customers
+  #############################################################################
+
   @doc """
   Creating or updating customers.
 
@@ -144,228 +150,12 @@ defmodule Customerio do
     end
   end
 
-  @doc """
-  Track the event for given customer.
-
-  ## Params
-
-    * `id` - the unique identifier for the customer.
-
-    * `name` - the name of the event to track.
-
-    * `data_map` - custom attributes to define the customer.
-
-    * `opts` - HTTPoison options.
-
-  ## Example
-
-  ```elixir
-  iex> Customerio.track(5, "purchase", %{price: 23,45})
-  {:ok, "..."}
-  iex> Customerio.track(6, "crash", %{reason: "epic fail"})
-  {:error, %Customerio.Error{}}
-  ```
-  """
-  @spec track(
-          id :: value,
-          name :: value,
-          data_map :: %{key: value},
-          opts :: Keyword.t()
-        ) :: {:ok, result} | {:error, Customerio.Error.t()}
-  def track(id, name, data_map, opts \\ []) do
-    send_behavioral_request(
-      :post,
-      "customers/#{URI.encode(id |> to_string)}/events",
-      %{name: name, data: data_map},
-      opts
-    )
-  end
-
-  @doc """
-  Track the event for given customer.
-
-  Raises `Customerio.Error` if fails.
-
-  ## Params
-
-    * `id` - the unique identifier for the customer.
-
-    * `name` - the name of the event to track.
-
-    * `data_map` - custom attributes to define the customer.
-
-    * `opts` - HTTPoison options.
-
-  ## Example
-
-  ```elixir
-  iex> Customerio.track!(5, "purchase", %{price: 23,45})
-  "..."
-  iex> Customerio.track!(6, "crash", %{reason: "epic fail"})
-  ** (Customerio.Error) "Epic fail!"
-  ```
-  """
-  @spec track!(
-          id :: value,
-          name :: value,
-          data_map :: %{key: value},
-          opts :: [key: value]
-        ) :: result | no_return()
-  def track!(id, name, data_map, opts \\ []) do
-    case track(id, name, data_map, opts) do
-      {:ok, result} -> result
-      {:error, e} -> raise e
-    end
-  end
-
-  @doc """
-  Track anonymous events directly without customer ID.
-
-  ## Params
-
-    * `name` - the name of the event to track.
-
-    * `data_map` - custom attributes to define the customer.
-
-    * `opts` - HTTPoison options.
-
-  ## Example
-
-  ```elixir
-  iex> Customerio.anonymous_track("purchase", %{recipient: "success@example.com"})
-  {:ok, "..."}
-  iex> Customerio.anonymous_track("purchase", %{recipient: "fail@example.com"})
-  {:error, %Customerio.Error{}}
-  ```
-  """
-  @spec anonymous_track(
-          name :: value,
-          data_map :: %{key: value},
-          opts :: [key: value]
-        ) :: {:ok, result} | {:error, Customerio.Error.t()}
-  def anonymous_track(name, data_map, opts \\ []) do
-    send_behavioral_request(
-      :post,
-      "events",
-      %{name: name, data: data_map},
-      opts
-    )
-  end
-
-  @doc """
-  Track anonymous events directly without customer ID.
-
-  Raises `Customerio.Error` if fails.
-
-  ## Params
-
-    * `name` - the name of the event to track.
-
-    * `data_map` - custom attributes to define the customer.
-
-    * `opts` - HTTPoison options.
-
-  ## Example
-
-  ```elixir
-  iex> Customerio.anonymous_track!("purchase", %{recipient: "success@example.com"})
-  "..."
-  iex> Customerio.anonymous_track!("purchase", %{recipient: "fail@example.com"})
-  ** (Customerio.Error) "Epic fail!"
-  ```
-  """
-  @spec anonymous_track!(
-          name :: value,
-          data_map :: %{key: value},
-          opts :: [key: value]
-        ) :: result | no_return()
-  def anonymous_track!(name, data_map, opts \\ []) do
-    case anonymous_track(name, data_map, opts) do
-      {:ok, result} -> result
-      {:error, e} -> raise e
-    end
-  end
-
-  @doc """
-  Track page view event directly with customer ID.
-
-  ## Params
-
-    * `id` - the unique identifier for the customer.
-
-    * `page_name` - the URL of the page.
-
-    * `data_map` - custom attributes to define the customer.
-
-    * `opts` - HTTPoison options.
-
-  ## Example
-
-  ```elixir
-  iex> Customerio.track_page_view(5, "http://google.com", %{ref: "success"})
-  {:ok, "..."}
-  iex> Customerio.track_page_view(5, "http://google.com", %{ref: "fail"})
-  {:error, %Customerio.Error{}}
-  ```
-  """
-  @spec track_page_view(
-          id :: value,
-          page_name :: String.t(),
-          data_map :: %{key: value},
-          opts :: [key: value]
-        ) :: {:ok, result} | {:error, Customerio.Error.t()}
-  def track_page_view(id, page_name, data_map, opts \\ []) do
-    send_behavioral_request(
-      :post,
-      "customers/#{URI.encode(id |> to_string)}/events",
-      %{name: page_name, type: "page", data: data_map},
-      opts
-    )
-  end
-
-  @doc """
-  Track page view event directly with customer ID.
-
-  Raises `Customerio.Error` if fails.
-
-  ## Params
-
-    * `id` - the unique identifier for the customer.
-
-    * `page_name` - the URL of the page.
-
-    * `data_map` - custom attributes to define the customer.
-
-    * `opts` - HTTPoison options.
-
-  ## Example
-
-  ```elixir
-  iex> Customerio.track_page_view!(5, "http://google.com", %{ref: "success"})
-  "..."
-  iex> Customerio.track_page_view!(5, "http://google.com", %{ref: "fail"})
-  ** (Customerio.Error) "Epic fail!"
-  ```
-  """
-  @spec track_page_view!(
-          id :: value,
-          page_name :: value,
-          data_map :: %{key: value},
-          opts :: [key: value]
-        ) :: result | no_return()
-  def track_page_view!(id, page_name, data_map, opts \\ []) do
-    case track_page_view(id, page_name, data_map, opts) do
-      {:ok, result} -> result
-      {:error, e} -> raise e
-    end
-  end
-
   #############################################################################
   ### Devices
   #############################################################################
 
   @doc """
-  Create or update a customer device.
+  Add or update a customer device.
 
   ## Params
 
@@ -408,7 +198,7 @@ defmodule Customerio do
   end
 
   @doc """
-  Create or update a customer device.
+  Add or update a customer device.
 
   Raises `Customerio.Error` if fails.
 
@@ -655,6 +445,290 @@ defmodule Customerio do
       {:error, e} -> raise e
     end
   end
+
+  @doc """
+  Sets a person's unsubscribed attribute to true,
+  attributes their unsubscribe request to the individual email/delivery that they they unsubscribed from,
+  and lets you segment your audience based on email_unsubscribed events when you use a custom subscription center.
+
+  ## Params
+
+    * `delivery_id` - The delivery resulting in a request to unsubscribe.
+
+    * `opts` - HTTPoison options.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.unsubscribe("delivery_id")
+  {ok, "..."}
+  iex> Customerio.unsubscribe("bad_delivery_id")
+  {:error, %Customerio.Error{}}
+  ```
+  """
+  @spec unsubscribe(
+    delivery_id :: value,
+    opts :: Keyword.t()
+  ) :: {:ok, result} | {:error, Customerio.Error.t()}
+  def unsubscribe(delivery_id, opts \\ []) do
+    send_behavioral_naked_request(
+      :post,
+      "unsubscribe/#{delivery_id}",
+      %{unsubscribe: true},
+      opts
+    )
+  end
+
+  @doc """
+  Sets a person's unsubscribed attribute to true,
+  attributes their unsubscribe request to the individual email/delivery that they they unsubscribed from,
+  and lets you segment your audience based on email_unsubscribed events when you use a custom subscription center.
+
+  Raises `Customerio.Error` if fails.
+
+  ## Params
+
+    * `delivery_id` - The delivery resulting in a request to unsubscribe.
+
+    * `opts` - HTTPoison options.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.unsubscribe!("delivery_id")
+  "..."
+  iex> Customerio.unsubscribe!("bad_delivery_id")
+  ** (Customerio.Error) "Epic fail!"
+  ```
+  """
+  @spec unsubscribe!(
+    delivery_id :: value,
+    opts :: Keyword.t()
+  ) :: {:ok, result} | {:error, Customerio.Error.t()}
+  def unsubscribe!(delivery_id, opts \\ []) do
+    case unsubscribe(delivery_id, opts) do
+      {:ok, result} -> result
+      {:error, e} -> raise e
+    end
+  end
+
+  @doc """
+  Track the event for given customer.
+
+  ## Params
+
+    * `id` - the unique identifier for the customer.
+
+    * `name` - the name of the event to track.
+
+    * `data_map` - custom attributes to define the customer.
+
+    * `opts` - HTTPoison options.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.track(5, "purchase", %{price: 23,45})
+  {:ok, "..."}
+  iex> Customerio.track(6, "crash", %{reason: "epic fail"})
+  {:error, %Customerio.Error{}}
+  ```
+  """
+  @spec track(
+          id :: value,
+          name :: value,
+          data_map :: %{key: value},
+          opts :: Keyword.t()
+        ) :: {:ok, result} | {:error, Customerio.Error.t()}
+  def track(id, name, data_map, opts \\ []) do
+    send_behavioral_request(
+      :post,
+      "customers/#{URI.encode(id |> to_string)}/events",
+      %{name: name, data: data_map},
+      opts
+    )
+  end
+
+  @doc """
+  Track the event for given customer.
+
+  Raises `Customerio.Error` if fails.
+
+  ## Params
+
+    * `id` - the unique identifier for the customer.
+
+    * `name` - the name of the event to track.
+
+    * `data_map` - custom attributes to define the customer.
+
+    * `opts` - HTTPoison options.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.track!(5, "purchase", %{price: 23,45})
+  "..."
+  iex> Customerio.track!(6, "crash", %{reason: "epic fail"})
+  ** (Customerio.Error) "Epic fail!"
+  ```
+  """
+  @spec track!(
+          id :: value,
+          name :: value,
+          data_map :: %{key: value},
+          opts :: [key: value]
+        ) :: result | no_return()
+  def track!(id, name, data_map, opts \\ []) do
+    case track(id, name, data_map, opts) do
+      {:ok, result} -> result
+      {:error, e} -> raise e
+    end
+  end
+
+  @doc """
+  Track anonymous events directly without customer ID.
+
+  ## Params
+
+    * `name` - the name of the event to track.
+
+    * `data_map` - custom attributes to define the customer.
+
+    * `opts` - HTTPoison options.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.anonymous_track("purchase", %{recipient: "success@example.com"})
+  {:ok, "..."}
+  iex> Customerio.anonymous_track("purchase", %{recipient: "fail@example.com"})
+  {:error, %Customerio.Error{}}
+  ```
+  """
+  @spec anonymous_track(
+          name :: value,
+          data_map :: %{key: value},
+          opts :: [key: value]
+        ) :: {:ok, result} | {:error, Customerio.Error.t()}
+  def anonymous_track(name, data_map, opts \\ []) do
+    send_behavioral_request(
+      :post,
+      "events",
+      %{name: name, data: data_map},
+      opts
+    )
+  end
+
+  @doc """
+  Track anonymous events directly without customer ID.
+
+  Raises `Customerio.Error` if fails.
+
+  ## Params
+
+    * `name` - the name of the event to track.
+
+    * `data_map` - custom attributes to define the customer.
+
+    * `opts` - HTTPoison options.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.anonymous_track!("purchase", %{recipient: "success@example.com"})
+  "..."
+  iex> Customerio.anonymous_track!("purchase", %{recipient: "fail@example.com"})
+  ** (Customerio.Error) "Epic fail!"
+  ```
+  """
+  @spec anonymous_track!(
+          name :: value,
+          data_map :: %{key: value},
+          opts :: [key: value]
+        ) :: result | no_return()
+  def anonymous_track!(name, data_map, opts \\ []) do
+    case anonymous_track(name, data_map, opts) do
+      {:ok, result} -> result
+      {:error, e} -> raise e
+    end
+  end
+
+  @doc """
+  Track page view event directly with customer ID.
+
+  ## Params
+
+    * `id` - the unique identifier for the customer.
+
+    * `page_name` - the URL of the page.
+
+    * `data_map` - custom attributes to define the customer.
+
+    * `opts` - HTTPoison options.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.track_page_view(5, "http://google.com", %{ref: "success"})
+  {:ok, "..."}
+  iex> Customerio.track_page_view(5, "http://google.com", %{ref: "fail"})
+  {:error, %Customerio.Error{}}
+  ```
+  """
+  @spec track_page_view(
+          id :: value,
+          page_name :: String.t(),
+          data_map :: %{key: value},
+          opts :: [key: value]
+        ) :: {:ok, result} | {:error, Customerio.Error.t()}
+  def track_page_view(id, page_name, data_map, opts \\ []) do
+    send_behavioral_request(
+      :post,
+      "customers/#{URI.encode(id |> to_string)}/events",
+      %{name: page_name, type: "page", data: data_map},
+      opts
+    )
+  end
+
+  @doc """
+  Track page view event directly with customer ID.
+
+  Raises `Customerio.Error` if fails.
+
+  ## Params
+
+    * `id` - the unique identifier for the customer.
+
+    * `page_name` - the URL of the page.
+
+    * `data_map` - custom attributes to define the customer.
+
+    * `opts` - HTTPoison options.
+
+  ## Example
+
+  ```elixir
+  iex> Customerio.track_page_view!(5, "http://google.com", %{ref: "success"})
+  "..."
+  iex> Customerio.track_page_view!(5, "http://google.com", %{ref: "fail"})
+  ** (Customerio.Error) "Epic fail!"
+  ```
+  """
+  @spec track_page_view!(
+          id :: value,
+          page_name :: value,
+          data_map :: %{key: value},
+          opts :: [key: value]
+        ) :: result | no_return()
+  def track_page_view!(id, page_name, data_map, opts \\ []) do
+    case track_page_view(id, page_name, data_map, opts) do
+      {:ok, result} -> result
+      {:error, e} -> raise e
+    end
+  end
+
+
 
   #############################################################################
   ### Segments

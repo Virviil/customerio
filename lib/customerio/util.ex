@@ -4,6 +4,8 @@ defmodule Customerio.Util do
 
   @behavioral_base_route "https://track.customer.io/api/v1/"
 
+  @behavioral_naked_route "https://track.customer.io/"
+
   @api_base_route "https://api.customer.io/v1/api"
 
   defp get_username, do: Application.get_env(:customerio, :site_id)
@@ -34,6 +36,20 @@ defmodule Customerio.Util do
         ) :: {:ok, String.t()} | {:error, Customerio.Error.t()}
   def send_behavioral_request(method, route, data_map, opts \\ []) do
     send_request(method, @behavioral_base_route <> route, data_map, opts)
+  end
+
+  @doc """
+  This method sends requests to `customer.io` Behavioral API endpoint WITHOUT api resource, with
+  defined method, route, body and HTTPoison options.
+  """
+  @spec send_behavioral_naked_request(
+          method :: method,
+          route :: String.t(),
+          data_map :: map(),
+          opts :: Keyword.t()
+        ) :: {:ok, String.t()} | {:error, Customerio.Error.t()}
+  def send_behavioral_naked_request(method, route, data_map, opts \\ []) do
+    send_request(method, @behavioral_naked_route <> route, data_map, opts)
   end
 
   @doc """
