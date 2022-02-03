@@ -23,7 +23,7 @@ defmodule Customerio do
 
     * `data_map` - custom attributes to define the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -36,8 +36,8 @@ defmodule Customerio do
   """
   @spec identify(
           id :: value,
-          data_map :: %{key: value},
-          opts :: [key: value]
+          data_map :: %{optional(atom) => value},
+          opts :: Keyword.t()
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def identify(id, data_map, opts \\ []) do
     send_behavioral_request(
@@ -59,7 +59,7 @@ defmodule Customerio do
 
     * `data_map` - custom attributes to define the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -72,7 +72,7 @@ defmodule Customerio do
   """
   @spec identify!(
           id :: value,
-          data_map :: %{key: value},
+          data_map :: %{optional(atom) => value},
           opts :: Keyword.t()
         ) :: result | no_return()
   def identify!(id, data_map, opts \\ []) do
@@ -89,7 +89,7 @@ defmodule Customerio do
 
     * `id` - the unique identifier for the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -102,7 +102,7 @@ defmodule Customerio do
   """
   @spec delete(
           id :: value,
-          opts :: [key: value]
+          opts :: Keyword.t()
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def delete(id, opts \\ []) do
     send_behavioral_request(
@@ -122,7 +122,7 @@ defmodule Customerio do
 
     * `id` - the unique identifier for the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -155,7 +155,7 @@ defmodule Customerio do
 
     * `data_map` - custom attributes to define the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -169,7 +169,7 @@ defmodule Customerio do
   @spec track(
           id :: value,
           name :: value,
-          data_map :: %{key: value},
+          data_map :: %{optional(atom) => value},
           opts :: Keyword.t()
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def track(id, name, data_map, opts \\ []) do
@@ -194,7 +194,7 @@ defmodule Customerio do
 
     * `data_map` - custom attributes to define the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -208,8 +208,8 @@ defmodule Customerio do
   @spec track!(
           id :: value,
           name :: value,
-          data_map :: %{key: value},
-          opts :: [key: value]
+          data_map :: %{optional(atom) => value},
+          opts :: Keyword.t()
         ) :: result | no_return()
   def track!(id, name, data_map, opts \\ []) do
     case track(id, name, data_map, opts) do
@@ -227,7 +227,7 @@ defmodule Customerio do
 
     * `data_map` - custom attributes to define the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -240,8 +240,8 @@ defmodule Customerio do
   """
   @spec anonymous_track(
           name :: value,
-          data_map :: %{key: value},
-          opts :: [key: value]
+          data_map :: %{optional(atom) => value},
+          opts :: Keyword.t()
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def anonymous_track(name, data_map, opts \\ []) do
     send_behavioral_request(
@@ -263,7 +263,7 @@ defmodule Customerio do
 
     * `data_map` - custom attributes to define the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -276,8 +276,8 @@ defmodule Customerio do
   """
   @spec anonymous_track!(
           name :: value,
-          data_map :: %{key: value},
-          opts :: [key: value]
+          data_map :: %{optional(atom) => value},
+          opts :: Keyword.t()
         ) :: result | no_return()
   def anonymous_track!(name, data_map, opts \\ []) do
     case anonymous_track(name, data_map, opts) do
@@ -297,7 +297,7 @@ defmodule Customerio do
 
     * `data_map` - custom attributes to define the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -311,8 +311,8 @@ defmodule Customerio do
   @spec track_page_view(
           id :: value,
           page_name :: String.t(),
-          data_map :: %{key: value},
-          opts :: [key: value]
+          data_map :: %{optional(atom) => value},
+          opts :: Keyword.t()
         ) :: {:ok, result} | {:error, Customerio.Error.t()}
   def track_page_view(id, page_name, data_map, opts \\ []) do
     send_behavioral_request(
@@ -336,7 +336,7 @@ defmodule Customerio do
 
     * `data_map` - custom attributes to define the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -350,8 +350,8 @@ defmodule Customerio do
   @spec track_page_view!(
           id :: value,
           page_name :: value,
-          data_map :: %{key: value},
-          opts :: [key: value]
+          data_map :: %{optional(atom) => value},
+          opts :: Keyword.t()
         ) :: result | no_return()
   def track_page_view!(id, page_name, data_map, opts \\ []) do
     case track_page_view(id, page_name, data_map, opts) do
@@ -380,7 +380,7 @@ defmodule Customerio do
       * `last_used` - UNIX timestamp representing the last used time for the device.
         If this is not included we default to the time of the device identify.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -425,7 +425,7 @@ defmodule Customerio do
       * `last_used` - UNIX timestamp representing the last used time for the device.
         If this is not included we default to the time of the device identify.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -459,7 +459,7 @@ defmodule Customerio do
 
     * `device_id` - the unique token for the user device.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -495,7 +495,7 @@ defmodule Customerio do
 
     * `device_id` - the unique token for the user device.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -531,7 +531,7 @@ defmodule Customerio do
 
     * `id` - the unique identifier for the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -566,7 +566,7 @@ defmodule Customerio do
 
     * `id` - the unique identifier for the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -598,7 +598,7 @@ defmodule Customerio do
 
     * `id` - the unique identifier for the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -634,7 +634,7 @@ defmodule Customerio do
 
     * `id` - the unique identifier for the customer.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -672,7 +672,7 @@ defmodule Customerio do
 
     * `ids` - a list of customer ids to add to the segment.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -711,7 +711,7 @@ defmodule Customerio do
 
     * `ids` - a list of customer ids to add to the segment.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -743,7 +743,7 @@ defmodule Customerio do
 
     * `ids` - a list of customer ids to add to the segment.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
@@ -779,7 +779,7 @@ defmodule Customerio do
 
     * `ids` - a list of customer ids to add to the segment.
 
-    * `opts` - HTTPoison options.
+    * `opts` - Hackney options.
 
   ## Example
 
