@@ -24,7 +24,7 @@ defmodule Customerio.Util do
 
   @doc """
   This method sends requests to `customer.io` Behavioral API endpoint, with
-  defined method, route, body and HTTPoison options.
+  defined method, route, body and Hackney options.
   """
   @spec send_behavioral_request(
           method :: method,
@@ -38,7 +38,7 @@ defmodule Customerio.Util do
 
   @doc """
   This method sends requests to `customer.io` API endpoint, with
-  defined method, route, body and HTTPoison options.
+  defined method, route, body and Hackney options.
   """
   @spec send_api_request(
           method :: method,
